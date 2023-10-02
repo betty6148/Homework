@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Betty Homework W1</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+  <style>
+    body {
+      background-color: antiquewhite;
+    }
+
+    .list {
+      width: 900px;
+      display: flex;
+      flex-wrap: wrap;
+      margin: auto;
+    }
+
+    button {
+      width: 48px;
+      margin-right: 12px;
+    }
+
+    .wrap {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 12px;
+    }
+
+    .swiper {
+      width: 600px;
+      height: 300px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Slider main container -->
+  <div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      <div class="swiper-slide">Slide 1</div>
+      <div class="swiper-slide">Slide 2</div>
+      <div class="swiper-slide">Slide 3</div>
+      ...
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+  </div>
+
+
+  <div class="container">
+    <div class="wrap">
+      <p id="cnt">目前共用0個卡片</p>
+      <div class="btnset">
+        <button type="button" class="btn btn-primary" id="add">+</button>
+        <button type="button" class="btn btn-primary" id="del">-</button>
+      </div>
+    </div>
+    <div class="list" id="list"></div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+
+  <script>
+    let cardArray = [];
+    const btnAdd = document.getElementById("add");
+    const btnDel = document.getElementById("del");
+    const list = document.getElementById("list");
+    let cnt = document.getElementById("cnt");
+    let count = 0;
+
+    btnAdd.addEventListener("click", handleAdd)
+    btnDel.addEventListener("click", handleDelete)
+
+    function handleAdd() {
+      cardArray.push(`
+                    <div class="card" style="width: 18rem;">
+                        <img src="https://picsum.photos/id/684/300/200" class="card-img-top" alt="...">
+                        <div class="card-body">
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                    </div>`)
+
+      console.log('add', cardArray)
+      count = cardArray.length;
+      render(cardArray)
+      console.log('length', count);
+
+    }
+
+
+    function handleDelete() {
+      cardArray.pop();
+      console.log('delete', cardArray)
+      count = cardArray.length;
+      render(cardArray)
+    }
+
+    function render(cardArray) {
+      list.innerHTML = ''
+      cardArray.forEach(card => {
+        list.innerHTML += card
+      });
+      cnt.textContent = `目前共用${count}個卡片`;
+
+
+      /*const newCardArray = cardArray.map(card => {
+          return `${card}<p>11111</p>` 
+      })*/
+
+    }
+
+
+
+    const swiper = new Swiper('.swiper', {
+      // Optional parameters
+      direction: 'horizontal',
+      loop: true,
+
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+      },
+
+      // Navigation arrows
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+
+      // And if we need scrollbar
+      scrollbar: {
+        el: '.swiper-scrollbar',
+      },
+    });
+  </script>
+</body>
+
+</html>
