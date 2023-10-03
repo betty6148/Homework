@@ -1,4 +1,4 @@
-.card {
+/* .card {
   position: relative;
   background-color: #fff;
   width: 500px;
@@ -10,17 +10,22 @@
   border-radius: 20px;
   background-size: cover;
   background-position: center;
-}
-.container {
-  display: flex;
-  justify-content: center;
-  margin-top: 5vh;
-}
+} */
+/* .container {
+	position: relative;
+	height:50vh;
+	max-height: 60vw;
+	display: flex;
+	justify-content: center;
+	margin-top: 5vh;
+	margin: auto;
+	background-color: #000s;
+} */
 .swipe {
   position: absolute;
 }
 
-.content {
+/* .content {
   position: absolute;
   bottom: 0;
   margin: 10px;
@@ -29,14 +34,14 @@
 }
 
 .btnSet {
-  position: relative;
+  position: absolute;
   width: 500px;
-  bottom: -680px;
+  bottom: -80px;
   display: flex;
   justify-content: space-around;
   margin: auto;
-}
-.btnSet .btn-like {
+} */
+/* .btnSet .btn-like {
   background-color: #ff7875;
 }
 .btnSet .btn-dislike {
@@ -44,4 +49,4 @@
 }
 .btnSet .btn-member {
   background-color: #ffe58f;
-}
+} */

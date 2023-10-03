@@ -1,7 +1,6 @@
 import Card from "./pages/Card";
-// import "./App.css";
+import "./App.css";
 import "./page_style/card.css";
-import "./page_style/login.css";
 // import { useState, useEffect } from "react";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import LogIn from "./pages/LogIn";
