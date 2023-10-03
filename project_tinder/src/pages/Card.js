@@ -1,10 +1,10 @@
 import React from "react";
-import "../App.css";
 import data from "../data";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import TinderCard from "react-tinder-card";
-
+import { Button } from "antd";
+import { HeartFilled, DislikeFilled, SmileFilled } from "@ant-design/icons";
 const Card = () => {
   const [animals, setAnimals] = useState([]);
   const [userLike, setUserLike] = useState([]);
@@ -39,7 +39,6 @@ const Card = () => {
     <>
       <NavLink to="/login">LogIn</NavLink>
       <div className="app">
-        <h1>Tinder Cards</h1>
         <div className="container">
           {animals.map((animal) => (
             <TinderCard
@@ -53,10 +52,43 @@ const Card = () => {
                 className="card"
                 style={{ backgroundImage: `url(${animal.imgURL})` }}
               >
-                <h3>{animal.name}</h3>
+                <div className="content">
+                  <h2>{animal.name}</h2>
+                  <HeartFilled />
+                  <DislikeFilled />
+                  <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Officiis, perspiciatis maxime repellendus corrupti provident
+                    totam animi officia autem quo id sed modi, tenetur assumenda
+                    suscipit nihil expedita libero at debitis.
+                  </p>
+                </div>
               </div>
             </TinderCard>
           ))}
+        </div>
+        <div className="btnSet">
+          <Button
+            className="btn btn-dislike"
+            type="primary"
+            size="large"
+            shape="circle"
+            icon={<DislikeFilled />}
+          />
+          <Button
+            className="btn btn-member"
+            type="primary "
+            shape="circle "
+            size="large"
+            icon={<SmileFilled />}
+          />
+          <Button
+            className="btn btn-like"
+            type="primary"
+            size="large"
+            shape="circle"
+            icon={<HeartFilled />}
+          />
         </div>
       </div>
     </>

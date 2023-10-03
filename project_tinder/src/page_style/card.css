@@ -1,4 +1,4 @@
-/* .card {
+.card {
   position: relative;
   background-color: #fff;
   width: 500px;
@@ -30,9 +30,11 @@
 
 .btnSet {
   position: relative;
-  bottom: -80px;
+  width: 500px;
+  bottom: -680px;
   display: flex;
   justify-content: space-around;
+  margin: auto;
 }
 .btnSet .btn-like {
   background-color: #ff7875;
@@ -42,4 +44,4 @@
 }
 .btnSet .btn-member {
   background-color: #ffe58f;
-} */
+}
