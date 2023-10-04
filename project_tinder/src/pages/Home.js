@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import data from "../data";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import TinderCard from "react-tinder-card";
 import { Button } from "antd";
 import { HeartFilled, DislikeFilled, SmileFilled } from "@ant-design/icons";
-const Card = () => {
+import Count from "../components/Count";
+
+const Home = () => {
   const [animals, setAnimals] = useState([]);
   const [userLike, setUserLike] = useState([]);
   const [userDisLike, setUserDisLike] = useState([]);
@@ -14,10 +16,13 @@ const Card = () => {
   useEffect(() => {
     // console.log(data?.[0]?.imgURL);
     setAnimals(data);
-
     // console.log(animals?.[0]?.name);
     // return data;
   }, []);
+
+  const divRef = useRef(null);
+  console.log("⭐ ~ file: Card.js:22 ~ Card ~ divRef:", divRef.current);
+  document.getElementById("app");
 
   function swiped(direction, category) {
     // console.log("🚀category:", category);
@@ -39,7 +44,10 @@ const Card = () => {
   return (
     <>
       <NavLink to="/login">LogIn</NavLink>
-      <div className="app">
+      {/* <NavLink to="/member">Member</NavLink> */}
+      {/* <NavLink to="/add">AddCard</NavLink> */}
+      <NavLink to="/edit">EditCard</NavLink>
+      <div className="app" ref={divRef}>
         <div
           className="container"
           style={{
@@ -88,9 +96,8 @@ const Card = () => {
                     color: `#fff`,
                   }}
                 >
-                  <h2>{animal.name}</h2>
-                  <HeartFilled />
-                  <DislikeFilled />
+                  <h2 className="text-3xl">{animal.name}</h2>
+                  <Count />
                   <p>
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Officiis, perspiciatis maxime repellendus corrupti provident
@@ -120,14 +127,17 @@ const Card = () => {
               shape="circle"
               icon={<DislikeFilled />}
             />
-            <Button
-              className="btn btn-member"
-              style={{ backgroundColor: `#ffe58f` }}
-              type="primary "
-              shape="circle "
-              size="large"
-              icon={<SmileFilled />}
-            />
+            <Link to="/member">
+              <Button
+                className="btn btn-member"
+                style={{ backgroundColor: `#ffe58f` }}
+                type="primary "
+                shape="circle "
+                size="large"
+                icon={<SmileFilled />}
+              />
+            </Link>
+
             <Button
               className="btn btn-like"
               style={{ backgroundColor: `#ff7875` }}
@@ -143,4 +153,4 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default Home;

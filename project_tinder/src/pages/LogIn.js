@@ -1,82 +1,113 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
-const LogIn = () => (
-  <Form
-    name="basic"
-    labelCol={{
-      span: 8,
-    }}
-    wrapperCol={{
-      span: 16,
-    }}
-    style={{
-      maxWidth: 600,
-    }}
-    initialValues={{
-      remember: true,
-    }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="Username"
-      name="username"
-      rules={[
-        {
-          required: true,
-          message: "Please input your username!",
-        },
-      ]}
-    >
-      <Input />
-    </Form.Item>
 
-    <Form.Item
-      label="Password"
-      name="password"
-      rules={[
-        {
-          required: true,
-          message: "Please input your password!",
-        },
-      ]}
-    >
-      <Input.Password />
-    </Form.Item>
+// const handleChange = (event) => {
+//   console.log(
+//     "⭐ ~ file: LogIn.js:12 ~ handleChange ~ value:",
+//     event.target.value
+//   );
+// };
 
-    <Form.Item
-      name="remember"
-      valuePropName="checked"
-      wrapperCol={{
-        offset: 8,
-        span: 16,
-      }}
-    >
-      <Checkbox>Remember me</Checkbox>
-    </Form.Item>
+const LogIn = () => {
+  const [form] = Form.useForm();
+  // const watchUserName = Form.useWatch("username", form);
 
-    <Form.Item
-      wrapperCol={{
-        offset: 8,
-        span: 16,
-      }}
-    >
-      <Button
-        className="text-3xl font-bold underline"
-        type="primary"
-        htmlType="submit"
-      >
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-);
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+
+  // const values = form.getFieldsValue();
+  // console.log("⭐ ~ file: LogIn.js:19 ~ LogIn ~ values:", values);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     const values = form.getFieldsValue();
+
+  //     console.log("⭐ ~ file: LogIn.js:19 ~ LogIn ~ values:", values);
+  //   }, 0);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
+
+  return (
+    <>
+      {/* <Input onChange={handleChange} /> */}
+      <div className="h-full w-full flex justify-center items-center p-8 ">
+        <Form
+          form={form}
+          className="bg-[#f2e1b5] p-12 rounded-lg"
+          name="basic"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            label="Username"
+            name="username"
+            initialValue=""
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            name="remember"
+            valuePropName="checked"
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </>
+  );
+};
 export default LogIn;
