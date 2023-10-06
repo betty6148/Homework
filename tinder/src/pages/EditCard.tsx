@@ -13,7 +13,7 @@ const EditCard = () => {
   const { id } = useParams();
   // const item_array = dataItems.filter((data) =>  data.id.toString() === id); // return array
   const item = dataItems.find((data) => data.id.toString() === id); // return array
-  const isLoading = true;
+  const isLoading = false;
 
   return (
     <>
@@ -23,8 +23,9 @@ const EditCard = () => {
             {!isLoading && item ? (
               <CardDetail
                 id={item.id}
-                title={item.name}
-                image={item.imgURL}
+                name={item.name}
+                category={item.name}
+                imgURL={item.imgURL}
                 description={item.description}
                 remove=""
               />

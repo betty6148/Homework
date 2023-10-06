@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from "react";
-import data from "../data";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import TinderCard from "react-tinder-card";
 import { Button } from "antd";
@@ -15,15 +14,10 @@ import {
 } from "@ant-design/icons";
 import Count from "../components/Count";
 
-const Home = () => {
-  // number
-  // string
-  // boolean
-  // any
-  // null
-  // undefined
+const Home = ({ list }: { list: TDataItem[] }) => {
+  console.log("⭐ ~ file: Home.tsx:25 ~ list:", list);
 
-  const [animals, setAnimals] = useState<TDataItem[]>([]);
+  // const [animals, setAnimals] = useState<TDataItem[]>([]);
   const [userLike, setUserLike] = useState<string[]>([]);
   const [userDisLike, setUserDisLike] = useState<string[]>([]);
   const [likeNum, setLikeNum] = useState(0);
@@ -38,13 +32,6 @@ const Home = () => {
 
   //   console.log(animals);
 
-  useEffect(() => {
-    // console.log(data?.[0]?.imgURL);
-    setAnimals(data);
-    // console.log(animals?.[0]?.name);
-    // return data;
-  }, []);
-
   const divRef = useRef(null);
   // console.log("⭐ ~ file: Card.js:22 ~ Card ~ divRef:", divRef.current);
   document.getElementById("app");
@@ -57,10 +44,6 @@ const Home = () => {
 
   // console.log("🚀 userLike:", userLike);
   // console.log("🚀 userDisLike:", userDisLike);
-
-  //function leftScreen(name) {
-  //   console.log(name);
-  // }
 
   return (
     <>
@@ -80,20 +63,19 @@ const Home = () => {
             margin: `auto`,
           }}
         >
-          {animals.map((animal) => (
+          {list.map((item) => (
             <TinderCard
-              key={animal.name}
+              key={item.name}
               className="swipe absolute"
-              // style={{ position: `absolute` }}
               preventSwipe={["up", "down"]}
-              onSwipe={(direction) => swiped(direction, animal.category)}
+              onSwipe={(direction) => swiped(direction, item.category)}
               flickOnSwipe={true}
               // onCardLeftScreen={() => leftScreen(animal.name)}
             >
               <div
                 className="card"
                 style={{
-                  backgroundImage: `url(${animal.imgURL})`,
+                  backgroundImage: `url(${item.imgURL})`,
                   position: `relative`,
                   width: `500px`,
                   maxWidth: `85vw`,
@@ -117,9 +99,9 @@ const Home = () => {
                     color: `#fff`,
                   }}
                 >
-                  <h2 className="text-3xl">{animal.name}</h2>
+                  <h2 className="text-3xl">{item.name}</h2>
                   <Count like={likeNum} dislike={disLikeNum} />
-                  <p>{animal.description}</p>
+                  <p>{item.description}</p>
                 </div>
               </div>
             </TinderCard>

@@ -1,17 +1,16 @@
-import React from "react";
 import { HeartFilled, DislikeFilled } from "@ant-design/icons";
 
-const Count = (props) => {
+const Count = ({ like, dislike }: { like: number; dislike: number }) => {
   return (
     <>
       <div className="my-2 ">
         <div className="inline mr-3">
           <HeartFilled />
-          <p className="inline ml-1">{props.like}</p>
+          <p className="inline ml-1">{like}</p>
         </div>
         <div className="inline">
           <DislikeFilled />
-          <p className="inline ml-1">{props.dislike}</p>
+          <p className="inline ml-1">{dislike}</p>
         </div>
       </div>
     </>

@@ -7,25 +7,15 @@ import AddCard from "./pages/AddCard";
 import EditCard from "./pages/EditCard";
 import { useState } from "react";
 import dataItems from "./data";
-// import data from "./data";
-// import { useState, useEffect } from "react";
-// pre-build
-// SCSS TailwindCss Linaria
-
-//CSS Module React
-
-// CSS-in-JS
-// styled-component emotion
 
 function App() {
   const [list, setList] = useState(dataItems);
+  console.log("⭐ ~ file: App.tsx:13 ~ App ~ list:", list);
 
-  // console.log("⭐ ~ file: App.js:42 ~ App ~ CardDetail:", CardDetail);
   return (
     <>
       <Router>
         <Routes>
-          <Route index element={<Home />} />
           <Route path="/login" element={<LogIn />} />
           <Route
             path="/member"
@@ -36,6 +26,7 @@ function App() {
             element={<AddCard list={list} setList={setList} />}
           />
           <Route path="/edit/:id" element={<EditCard />} />
+          <Route index element={<Home list={list} />} />
         </Routes>
       </Router>
     </>

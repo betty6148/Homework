@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Input, Button } from "antd";
-import CardUpload from "../components/CardUpload";
+import CardUpload, { imageUrlAtom } from "../components/CardUpload";
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { TDataItem } from "../types";
+import { useAtom, useSetAtom } from "jotai";
 
 const { TextArea } = Input;
 const AddCard = ({
@@ -13,6 +14,8 @@ const AddCard = ({
   list: TDataItem[];
   setList: React.Dispatch<React.SetStateAction<TDataItem[]>>;
 }) => {
+  const imageUrl = useAtom<string>(imageUrlAtom);
+  const setImageUrl = useSetAtom(imageUrlAtom);
   const [title, setTitle] = useState("");
   const title_onchange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -32,10 +35,14 @@ const AddCard = ({
       id: nanoid(),
       name: title,
       category,
-      imgURL: "#",
+      imgURL: imageUrl[0],
       description,
+      remove: "",
     };
     setList([...list, newContent]);
+    setTitle("");
+    setDescription("");
+    setImageUrl("");
   };
 
   // type TStatus = "PROCESSING" | "PENDING" | "COMPLETE" | "CANCEL" | "REFUND";
@@ -59,6 +66,9 @@ const AddCard = ({
 
   return (
     <>
+      <Link to="/member">
+        <Button type="default">GO to Member</Button>
+      </Link>
       <div className="w-4/5 m-auto mt-24">
         <div className="flex justify-center">
           <CardUpload />
@@ -89,9 +99,6 @@ const AddCard = ({
           <Button type="primary" onClick={handleClick}>
             Confirm
           </Button>
-          <Link to="/member">
-            <Button type="primary">GO to Member</Button>
-          </Link>
         </div>
       </div>
     </>
