@@ -3,13 +3,18 @@ import CardDetail from "../components/CardDetail";
 import { Link } from "react-router-dom";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import { TDataItem } from "../types";
 
-const Member = ({ list, setList }) => {
-  const handleDelete = (id) => (e) => {
-    e.preventDefault();
+const Member = ({
+  list,
+  setList,
+}: {
+  list: TDataItem[];
+  setList: React.Dispatch<React.SetStateAction<TDataItem[]>>;
+}) => {
+  const handleDelete = (id: string | number) => () => {
     const filteredArray = list.filter((item) => item.id !== id);
     setList(filteredArray);
-    e.stopPropagation();
   };
 
   return (
@@ -19,8 +24,9 @@ const Member = ({ list, setList }) => {
           <CardDetail
             key={item.id}
             id={item.id}
-            title={item.name}
-            image={item.imgURL}
+            name={item.name}
+            category={item.name}
+            imgURL={item.imgURL}
             description={item.description}
             remove={handleDelete(item.id)}
           />

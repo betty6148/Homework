@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input, Button } from "antd";
 import CardUpload from "../components/CardUpload";
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { TDataItem } from "../types";
 
 const { TextArea } = Input;
-const AddCard = ({ list, setList }) => {
+const AddCard = ({
+  list,
+  setList,
+}: {
+  list: TDataItem[];
+  setList: React.Dispatch<React.SetStateAction<TDataItem[]>>;
+}) => {
   const [title, setTitle] = useState("");
-  const title_onchange = (event) => {
+  const title_onchange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     setTitle(event.target.value);
   };
   const category = title;
   const [description, setDescription] = useState("");
-  const description_onchange = (event) => {
+  const description_onchange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    event
+  ) => {
     setDescription(event.target.value);
   };
 
@@ -26,6 +37,25 @@ const AddCard = ({ list, setList }) => {
     };
     setList([...list, newContent]);
   };
+
+  // type TStatus = "PROCESSING" | "PENDING" | "COMPLETE" | "CANCEL" | "REFUND";
+
+  // const [status, setStatus] = useState<{
+  //   label: TStatus;
+  //   value?: TStatus;
+  // }>({
+  //   label: "PENDING",
+  //   value: "PENDING",
+  // });
+
+  // useEffect(() => {
+  //   const newStatus = {
+  //     label: "COMPLETE",
+  //   } as {
+  // 		label: TStatus;
+  // 	};
+  //   setStatus(newStatus);
+  // }, []);
 
   return (
     <>

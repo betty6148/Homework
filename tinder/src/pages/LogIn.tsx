@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
-
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+//提交表单且数据验证成功/失败后回调事件
+// const onFinishFailed = (errorInfo) => {
+//   console.log("Failed:", errorInfo);
+// };
+// const onFinish = (values) => {
+//   console.log("Success:", values);
+// };
 
 // const handleChange = (event) => {
 //   console.log(
-//     "⭐ ~ file: LogIn.js:12 ~ handleChange ~ value:",
 //     event.target.value
 //   );
 // };
@@ -15,10 +17,6 @@ const onFinishFailed = (errorInfo) => {
 const LogIn = () => {
   const [form] = Form.useForm();
   // const watchUserName = Form.useWatch("username", form);
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
   // const values = form.getFieldsValue();
   // console.log("⭐ ~ file: LogIn.js:19 ~ LogIn ~ values:", values);
@@ -53,9 +51,9 @@ const LogIn = () => {
           initialValues={{
             remember: true,
           }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          // onFinish={onFinish}
+          // onFinishFailed={onFinishFailed}
+          // autoComplete="off"
         >
           <Form.Item
             label="Username"

@@ -24,8 +24,8 @@ const Home = () => {
   // undefined
 
   const [animals, setAnimals] = useState<TDataItem[]>([]);
-  const [userLike, setUserLike] = useState([]);
-  const [userDisLike, setUserDisLike] = useState([]);
+  const [userLike, setUserLike] = useState<string[]>([]);
+  const [userDisLike, setUserDisLike] = useState<string[]>([]);
   const [likeNum, setLikeNum] = useState(0);
   const [disLikeNum, setDisLikeNum] = useState(0);
 
@@ -50,10 +50,6 @@ const Home = () => {
   document.getElementById("app");
 
   function swiped(direction: string, category: string) {
-    // console.log("🚀category:", category);
-
-    // if (direction === "right") setUserLike([...userLike, category]);
-    // else setUserDisLike([...userDisLike, category]);
     direction === "right"
       ? setUserLike([...userLike, category])
       : setUserDisLike([...userDisLike, category]);
@@ -87,10 +83,11 @@ const Home = () => {
           {animals.map((animal) => (
             <TinderCard
               key={animal.name}
-              className="swipe"
-              style={{ position: `absolute` }}
+              className="swipe absolute"
+              // style={{ position: `absolute` }}
               preventSwipe={["up", "down"]}
               onSwipe={(direction) => swiped(direction, animal.category)}
+              flickOnSwipe={true}
               // onCardLeftScreen={() => leftScreen(animal.name)}
             >
               <div
@@ -151,8 +148,8 @@ const Home = () => {
               <Button
                 className="btn btn-member"
                 style={{ backgroundColor: `#ffe58f` }}
-                type="primary "
-                shape="circle "
+                type="primary"
+                shape="circle"
                 size="large"
                 icon={<SmileFilled />}
               />
