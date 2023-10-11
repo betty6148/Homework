@@ -3,17 +3,25 @@ import CardDetail from "../components/CardDetail";
 import Count from "../components/Count";
 import { useParams } from "react-router-dom";
 import dataItems from "../data";
+import { useEffect, useState } from "react";
 
 const { TextArea } = Input;
-// const onChange = (e) => {
-//   console.log("Change:", e.target.value);
-// };
 
+const isLoading = false;
 const EditCard = () => {
   const { id } = useParams();
   // const item_array = dataItems.filter((data) =>  data.id.toString() === id); // return array
   const item = dataItems.find((data) => data.id.toString() === id); // return array
-  const isLoading = false;
+  const [inputTitle, setInputTitle] = useState<string>(item?.name || "");
+  const [inputDescription, setInputDescription] = useState<string>(
+    item?.description || ""
+  );
+  const TextOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTitle(e.target.value);
+  };
+  const TextAreaOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputDescription(e.target.value);
+  };
 
   return (
     <>
@@ -23,11 +31,12 @@ const EditCard = () => {
             {!isLoading && item ? (
               <CardDetail
                 id={item.id}
-                name={item.name}
+                name={inputTitle}
                 category={item.name}
                 imgURL={item.imgURL}
-                description={item.description}
-                remove=""
+                description={inputDescription}
+                like={item.like}
+                dislike={item.dislike}
               />
             ) : (
               <>No data</>
@@ -40,13 +49,17 @@ const EditCard = () => {
             )}
 
             <div className="flex justify-center">
-              <Count />
+              {!isLoading && item ? (
+                <Count like={item.like} dislike={item.dislike} />
+              ) : (
+                <>No data</>
+              )}
             </div>
           </div>
         </div>
 
         <div className="py-8">
-          <Input placeholder="Basic usage" className="mb-2" />
+          <Input placeholder="Title" className="mb-2" onChange={TextOnChange} />
           <TextArea
             showCount
             maxLength={100}
@@ -54,13 +67,12 @@ const EditCard = () => {
               height: 120,
               resize: "none",
             }}
-            // onChange={onChange}
-            placeholder="disable resize"
-            className=""
+            onChange={TextAreaOnChange}
+            placeholder="Describe..."
           />
         </div>
         <div className="flex justify-center">
-          <Button type="primary">Primary Button</Button>
+          <Button type="primary">OK</Button>
         </div>
       </div>
     </>

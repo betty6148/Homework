@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef } from "react";
+import { useRef, useMemo, createRef } from "react";
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import TinderCard from "react-tinder-card";
@@ -15,9 +15,29 @@ import {
 import Count from "../components/Count";
 
 const Home = ({ list }: { list: TDataItem[] }) => {
-  console.log("⭐ ~ file: Home.tsx:25 ~ list:", list);
+  const [currentIndex, setCurrentIndex] = useState(list.length - 1);
+  const canSwipe = currentIndex >= 0;
+  const currentIndexRef = useRef(currentIndex);
 
-  // const [animals, setAnimals] = useState<TDataItem[]>([]);
+  const childRefs = useMemo(
+    () =>
+      Array(list.length)
+        .fill(0)
+        .map(() => createRef<HTMLDivElement>()),
+    [list.length]
+  );
+
+  const updateCurrentIndex = (val: number) => {
+    setCurrentIndex(val);
+    currentIndexRef.current = val;
+  };
+
+  const swipe = async (dir: "left" | "right") => {
+    if (canSwipe && currentIndex < list.length) {
+      await (childRefs[currentIndex] as any).current.swipe(dir); // Swipe the card!
+    }
+  };
+
   const [userLike, setUserLike] = useState<string[]>([]);
   const [userDisLike, setUserDisLike] = useState<string[]>([]);
   const [likeNum, setLikeNum] = useState(0);
@@ -25,32 +45,29 @@ const Home = ({ list }: { list: TDataItem[] }) => {
 
   const handleLike = () => {
     setLikeNum(likeNum + 1);
+    swipe("right");
   };
   const handleDisLike = () => {
     setDisLikeNum(disLikeNum + 1);
+    swipe("left");
   };
-
-  //   console.log(animals);
-
-  const divRef = useRef(null);
-  // console.log("⭐ ~ file: Card.js:22 ~ Card ~ divRef:", divRef.current);
-  document.getElementById("app");
-
-  function swiped(direction: string, category: string) {
+  function swiped(direction: string, category: string, index: number) {
     direction === "right"
       ? setUserLike([...userLike, category])
       : setUserDisLike([...userDisLike, category]);
+
+    updateCurrentIndex(index - 1);
   }
 
-  // console.log("🚀 userLike:", userLike);
-  // console.log("🚀 userDisLike:", userDisLike);
+  console.log("🚀 userLike:", userLike);
+  console.log("🚀 userDisLike:", userDisLike);
 
   return (
     <>
       <NavLink to="/login">
         <UserOutlined />
       </NavLink>
-      <div className="app" ref={divRef}>
+      <div className="app">
         <div
           className="container"
           style={{
@@ -63,13 +80,13 @@ const Home = ({ list }: { list: TDataItem[] }) => {
             margin: `auto`,
           }}
         >
-          {list.map((item) => (
+          {list.map((item, index) => (
             <TinderCard
+              ref={childRefs[index] as React.Ref<any>}
               key={item.name}
               className="swipe absolute"
               preventSwipe={["up", "down"]}
-              onSwipe={(direction) => swiped(direction, item.category)}
-              flickOnSwipe={true}
+              onSwipe={(direction) => swiped(direction, item.category, index)}
               // onCardLeftScreen={() => leftScreen(animal.name)}
             >
               <div
@@ -100,7 +117,10 @@ const Home = ({ list }: { list: TDataItem[] }) => {
                   }}
                 >
                   <h2 className="text-3xl">{item.name}</h2>
-                  <Count like={likeNum} dislike={disLikeNum} />
+                  <Count
+                    like={likeNum + item.like}
+                    dislike={disLikeNum + item.dislike}
+                  />
                   <p>{item.description}</p>
                 </div>
               </div>

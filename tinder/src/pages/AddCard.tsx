@@ -37,7 +37,8 @@ const AddCard = ({
       category,
       imgURL: imageUrl[0],
       description,
-      remove: "",
+      like: 0,
+      dislike: 0,
     };
     setList([...list, newContent]);
     setTitle("");

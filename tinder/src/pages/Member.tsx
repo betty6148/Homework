@@ -33,6 +33,8 @@ const Member = ({
               imgURL={item.imgURL}
               description={item.description}
               remove={handleDelete(item.id)}
+              like={item.like}
+              dislike={item.dislike}
             />
           ))}
         </div>

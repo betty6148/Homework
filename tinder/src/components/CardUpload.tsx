@@ -24,7 +24,6 @@ const beforeUpload = (file: RcFile) => {
 export const imageUrlAtom = atom<string>("");
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  // const [imageUrl, setImageUrl] = useState<string>();
   const [imageUrl, setImageUrl] = useAtom(imageUrlAtom);
 
   const handleChange: UploadProps["onChange"] = (

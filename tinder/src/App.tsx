@@ -10,7 +10,6 @@ import dataItems from "./data";
 
 function App() {
   const [list, setList] = useState(dataItems);
-  console.log("⭐ ~ file: App.tsx:13 ~ App ~ list:", list);
 
   return (
     <>

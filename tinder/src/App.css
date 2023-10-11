@@ -1,3 +1,5 @@
 .swipe {
   position: absolute;
+  /* transform: rotate (13deg) translate3d(700px, 25px, 3px);
+  transition: transform 0.5s ease; */
 }

@@ -5,7 +5,9 @@ export type TDataItem = {
   category: string;
   imgURL: string;
   description: string;
-  remove: any;
+  remove?: () => void;
+  like: number;
+  dislike: number;
 };
 
 type TInterest = {
