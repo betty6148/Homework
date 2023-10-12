@@ -9,6 +9,74 @@ export type TDataItem = {
   like: number;
   dislike: number;
 };
+// export type TCardItem = {
+//   title: string;
+//   category: string;
+//   // imgURL: string;
+//   description: string;
+//   remove?: () => void;
+//   like: number;
+//   dislike: number;
+// };
+
+type TImg = {
+  data: {
+    id?: number;
+    attributes: {
+      name?: string;
+      alternativeText?: null;
+      caption?: null;
+      width?: number;
+      height?: number;
+      formats: {
+        thumbnail: {
+          name?: string;
+          hash?: string;
+          ext?: string;
+          mime?: string;
+          path?: null;
+          width?: number;
+          height?: number;
+          size?: number;
+          url: string;
+        };
+        small: {
+          name?: string;
+          hash?: string;
+          ext?: string;
+          mime?: string;
+          path?: null;
+          width?: number;
+          height?: number;
+          size?: number;
+          url: string;
+        };
+      };
+    };
+    hash: string;
+    ext: string;
+    mime: string;
+    size: number;
+    url: string;
+    previewUrl: null;
+    provider: string;
+    provider_metadata: null;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
+export type TData = {
+  id: number;
+  attributes: {
+    title: string;
+    category: string;
+    description: string;
+    remove?: () => void;
+    like: number;
+    dislike: number;
+    image: TImg;
+  };
+};
 
 type TInterest = {
   name: string;

@@ -3,38 +3,44 @@ import CardDetail from "../components/CardDetail";
 import { Link } from "react-router-dom";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { TDataItem } from "../types";
-
+// import { TDataItem } from "../types";
+import { TData } from "../types";
+import { API_URL } from "../utils";
 const Member = ({
-  list,
-  setList,
+  cardList,
+  setCardList,
 }: {
-  list: TDataItem[];
-  setList: React.Dispatch<React.SetStateAction<TDataItem[]>>;
+  cardList: TData[];
+  setCardList: React.Dispatch<React.SetStateAction<TData[]>>;
 }) => {
-  const handleDelete = (id: string | number) => () => {
-    const filteredArray = list.filter((item) => item.id !== id);
-    setList(filteredArray);
+  const handleDelete = (id: number | string) => () => {
+    const filteredArray = cardList.filter((item) => item.id !== id);
+    setCardList(filteredArray);
   };
+  console.log("⭐ ~ file: Member.tsx:16 ~ cardList:", cardList);
 
   return (
     <>
       <Link to="/">
-        <Button type="default">GO to Home</Button>
+        <Button type="default">Go to Home</Button>
       </Link>
       <div className="p-8">
         <div className="grid grid-cols-3 gap-8 justify-center justify-items-center">
-          {list.map((item) => (
+          {cardList.map((item) => (
             <CardDetail
               key={item.id}
               id={item.id}
-              name={item.name}
-              category={item.name}
-              imgURL={item.imgURL}
-              description={item.description}
+              name={item.attributes.title}
+              category={item.attributes.title}
+              imgURL={
+                `${API_URL}` +
+                item.attributes?.image?.data?.attributes?.formats?.thumbnail
+                  ?.url
+              }
+              description={item.attributes.description}
               remove={handleDelete(item.id)}
-              like={item.like}
-              dislike={item.dislike}
+              like={item.attributes.like}
+              dislike={item.attributes.dislike}
             />
           ))}
         </div>

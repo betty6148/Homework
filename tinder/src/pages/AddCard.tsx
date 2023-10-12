@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Input, Button } from "antd";
 import CardUpload, { imageUrlAtom } from "../components/CardUpload";
 import { Link } from "react-router-dom";
-import { nanoid } from "nanoid";
-import { TDataItem } from "../types";
+// import { nanoid } from "nanoid";
+import { TData } from "../types";
+
 import { useAtom, useSetAtom } from "jotai";
 
 const { TextArea } = Input;
 const AddCard = ({
-  list,
-  setList,
+  cardList,
+  setCardList,
 }: {
-  list: TDataItem[];
-  setList: React.Dispatch<React.SetStateAction<TDataItem[]>>;
+  cardList: TData[];
+  setCardList: React.Dispatch<React.SetStateAction<TData[]>>;
 }) => {
   const imageUrl = useAtom<string>(imageUrlAtom);
   const setImageUrl = useSetAtom(imageUrlAtom);
@@ -32,43 +33,26 @@ const AddCard = ({
 
   const handleClick = () => {
     const newContent = {
-      id: nanoid(),
-      name: title,
-      category,
-      imgURL: imageUrl[0],
-      description,
-      like: 0,
-      dislike: 0,
+      id: cardList.length + 1,
+      attributes: {
+        title,
+        category,
+        imgURL: imageUrl[0],
+        description,
+        like: 0,
+        dislike: 0,
+      },
     };
-    setList([...list, newContent]);
+    setCardList([...cardList, newContent]);
     setTitle("");
     setDescription("");
     setImageUrl("");
   };
 
-  // type TStatus = "PROCESSING" | "PENDING" | "COMPLETE" | "CANCEL" | "REFUND";
-
-  // const [status, setStatus] = useState<{
-  //   label: TStatus;
-  //   value?: TStatus;
-  // }>({
-  //   label: "PENDING",
-  //   value: "PENDING",
-  // });
-
-  // useEffect(() => {
-  //   const newStatus = {
-  //     label: "COMPLETE",
-  //   } as {
-  // 		label: TStatus;
-  // 	};
-  //   setStatus(newStatus);
-  // }, []);
-
   return (
     <>
       <Link to="/member">
-        <Button type="default">GO to Member</Button>
+        <Button type="default">Go to Member</Button>
       </Link>
       <div className="w-4/5 m-auto mt-24">
         <div className="flex justify-center">

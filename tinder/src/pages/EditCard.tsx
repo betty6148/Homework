@@ -2,20 +2,29 @@ import { Input, Button } from "antd";
 import CardDetail from "../components/CardDetail";
 import Count from "../components/Count";
 import { useParams } from "react-router-dom";
-import dataItems from "../data";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { TData } from "../types";
+import { API_URL } from "../utils";
 
 const { TextArea } = Input;
 
 const isLoading = false;
-const EditCard = () => {
+const EditCard = ({ cardList }: { cardList: TData[] }) => {
   const { id } = useParams();
   // const item_array = dataItems.filter((data) =>  data.id.toString() === id); // return array
-  const item = dataItems.find((data) => data.id.toString() === id); // return array
-  const [inputTitle, setInputTitle] = useState<string>(item?.name || "");
-  const [inputDescription, setInputDescription] = useState<string>(
-    item?.description || ""
+  const item = cardList.find((data) => data.id.toString() === id); // return array
+  const [inputTitle, setInputTitle] = useState<string>(
+    item?.attributes.title || ""
   );
+  const [inputDescription, setInputDescription] = useState<string>(
+    item?.attributes.description || ""
+  );
+  // 	const [img,setImg]=useState(item?.imgURL||"")
+  // const handleClick=()=>{
+  // 	setImg("")
+  // }
+  // console.log("⭐ ~ file: EditCard.tsx:15 ~ EditCard ~ data:", data);
+
   const TextOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputTitle(e.target.value);
   };
@@ -32,11 +41,16 @@ const EditCard = () => {
               <CardDetail
                 id={item.id}
                 name={inputTitle}
-                category={item.name}
-                imgURL={item.imgURL}
+                category={item.attributes.title}
+                imgURL={
+                  `${API_URL}` +
+                  item?.attributes?.image?.data?.attributes?.formats?.thumbnail
+                    ?.url
+                }
                 description={inputDescription}
-                like={item.like}
-                dislike={item.dislike}
+                like={item.attributes.like}
+                dislike={item.attributes.dislike}
+                // remove={}
               />
             ) : (
               <>No data</>
@@ -50,7 +64,10 @@ const EditCard = () => {
 
             <div className="flex justify-center">
               {!isLoading && item ? (
-                <Count like={item.like} dislike={item.dislike} />
+                <Count
+                  like={item.attributes.like}
+                  dislike={item.attributes.dislike}
+                />
               ) : (
                 <>No data</>
               )}
