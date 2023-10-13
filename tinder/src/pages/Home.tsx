@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef, useMemo, createRef, useState } from "react";
+import { useMemo, createRef, useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import TinderCard from "react-tinder-card";
 import { Button } from "antd";
@@ -13,11 +13,22 @@ import {
 } from "@ant-design/icons";
 import Count from "../components/Count";
 
+let render_count = 0;
+
 const Home = ({ cardList }: { cardList: TData[] }) => {
-  console.log("⭐ cardList:", cardList);
   const [currentIndex, setCurrentIndex] = useState(cardList.length - 1);
+  render_count++;
+  console.log("⭐ ~ file: Home.tsx:21 ~ Home ~ render_count:", render_count);
+
+  useEffect(() => {
+    if (cardList.length) {
+      setCurrentIndex(cardList.length - 1);
+    }
+  }, [cardList.length]);
+
   const canSwipe = currentIndex >= 0;
-  const currentIndexRef = useRef(currentIndex);
+
+  console.log("⭐  currentIndex:", currentIndex);
 
   const childRefs = useMemo(
     () =>
@@ -29,15 +40,19 @@ const Home = ({ cardList }: { cardList: TData[] }) => {
 
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
-    currentIndexRef.current = val;
   };
 
   const swipe = async (dir: "left" | "right") => {
     if (canSwipe && currentIndex < cardList.length) {
-      await (childRefs[currentIndex] as any).current.swipe(dir); // Swipe the card!
+      await (childRefs[currentIndex] as any).current.swipe(dir);
     }
   };
-
+  function swiped(direction: string, category: string, index: number) {
+    direction === "right"
+      ? setUserLike([...userLike, category])
+      : setUserDisLike([...userDisLike, category]);
+    updateCurrentIndex(index - 1);
+  }
   const [userLike, setUserLike] = useState<string[]>([]);
   const [userDisLike, setUserDisLike] = useState<string[]>([]);
   const [likeNum, setLikeNum] = useState(0);
@@ -51,15 +66,8 @@ const Home = ({ cardList }: { cardList: TData[] }) => {
     setDisLikeNum(disLikeNum + 1);
     swipe("left");
   };
-  function swiped(direction: string, category: string, index: number) {
-    direction === "right"
-      ? setUserLike([...userLike, category])
-      : setUserDisLike([...userDisLike, category]);
 
-    updateCurrentIndex(index - 1);
-  }
-
-  console.log("🚀 userLike:", userLike);
+  // console.log("🚀 userLike:", userLike);
   // console.log("🚀 userDisLike:", userDisLike);
   return (
     <>
@@ -79,14 +87,14 @@ const Home = ({ cardList }: { cardList: TData[] }) => {
             margin: `auto`,
           }}
         >
-          {cardList.map((item) => (
+          {cardList.map((item, index) => (
             <TinderCard
-              ref={childRefs[item.id] as React.Ref<any>}
+              ref={childRefs[index] as React.Ref<any>}
               key={item.attributes.title}
               className="swipe absolute"
               preventSwipe={["up", "down"]}
               onSwipe={(direction) =>
-                swiped(direction, item.attributes.category, item.id)
+                swiped(direction, item.attributes.category, index)
               }
               // onCardLeftScreen={() => leftScreen(animal.name)}
             >

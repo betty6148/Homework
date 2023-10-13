@@ -14,6 +14,7 @@ import { API_URL, TOKEN } from "./utils";
 function App() {
   // const [list, setList] = useState(dataItems);
   const [cardList, setCardList] = useState<TData[]>([]);
+  // console.log("⭐ ~ file: App.tsx:17 ~ App ~ cardList:", cardList);
 
   useEffect(() => {
     axios
@@ -26,27 +27,35 @@ function App() {
         },
       })
       .then((response) => {
-        console.log("⭐ ~ file: App.tsx:26 ~ .then ~ response:", response);
         setCardList(response?.data?.data || []);
       });
   }, []);
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LogIn />} />
-          <Route
-            path="/member"
-            element={<Member cardList={cardList} setCardList={setCardList} />}
-          />
-          <Route
-            path="/add"
-            element={<AddCard cardList={cardList} setCardList={setCardList} />}
-          />
-          <Route path="/edit/:id" element={<EditCard cardList={cardList} />} />
-          <Route index element={<Home cardList={cardList} />} />
-        </Routes>
-      </Router>
+      {cardList ? (
+        <Router>
+          <Routes>
+            <Route path="/login" element={<LogIn />} />
+            <Route
+              path="/member"
+              element={<Member cardList={cardList} setCardList={setCardList} />}
+            />
+            <Route
+              path="/add"
+              element={
+                <AddCard cardList={cardList} setCardList={setCardList} />
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={<EditCard cardList={cardList} />}
+            />
+            <Route index element={<Home cardList={cardList} />} />
+          </Routes>
+        </Router>
+      ) : (
+        <p>isLoading...</p>
+      )}
     </>
   );
 }

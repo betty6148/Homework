@@ -3,7 +3,6 @@ import CardDetail from "../components/CardDetail";
 import { Link } from "react-router-dom";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-// import { TDataItem } from "../types";
 import { TData } from "../types";
 import { API_URL } from "../utils";
 const Member = ({
@@ -17,7 +16,6 @@ const Member = ({
     const filteredArray = cardList.filter((item) => item.id !== id);
     setCardList(filteredArray);
   };
-  console.log("⭐ ~ file: Member.tsx:16 ~ cardList:", cardList);
 
   return (
     <>

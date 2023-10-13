@@ -4,7 +4,8 @@ import Count from "../components/Count";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { TData } from "../types";
-import { API_URL } from "../utils";
+import axios from "axios";
+import { API_URL, TOKEN } from "../utils";
 
 const { TextArea } = Input;
 
@@ -19,17 +20,39 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
   const [inputDescription, setInputDescription] = useState<string>(
     item?.attributes.description || ""
   );
-  // 	const [img,setImg]=useState(item?.imgURL||"")
-  // const handleClick=()=>{
-  // 	setImg("")
-  // }
-  // console.log("⭐ ~ file: EditCard.tsx:15 ~ EditCard ~ data:", data);
 
   const TextOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputTitle(e.target.value);
   };
   const TextAreaOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputDescription(e.target.value);
+  };
+
+  const handleRemove = () => {};
+  const newCard = {
+    title: inputTitle,
+    category: inputTitle,
+    description: inputDescription,
+  };
+  const handleClick = () => {
+    axios
+      .put(
+        `${API_URL}/api/cards/${id}`,
+        {
+          data: newCard,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -50,7 +73,7 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
                 description={inputDescription}
                 like={item.attributes.like}
                 dislike={item.attributes.dislike}
-                // remove={}
+                remove={handleRemove}
               />
             ) : (
               <>No data</>
@@ -89,7 +112,9 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
           />
         </div>
         <div className="flex justify-center">
-          <Button type="primary">OK</Button>
+          <Button type="primary" onClick={handleClick}>
+            OK
+          </Button>
         </div>
       </div>
     </>
