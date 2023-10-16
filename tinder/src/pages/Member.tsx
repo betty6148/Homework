@@ -1,21 +1,41 @@
-import React from "react";
+// import { useEffect } from "react";
 import CardDetail from "../components/CardDetail";
 import { Link } from "react-router-dom";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { TData } from "../types";
-import { API_URL } from "../utils";
+import axios from "axios";
+import { API_URL, TOKEN } from "../utils";
+
 const Member = ({
   cardList,
-  setCardList,
+  // setCardList
+  setIsFetch,
+  isFetch,
 }: {
   cardList: TData[];
-  setCardList: React.Dispatch<React.SetStateAction<TData[]>>;
+  // setCardList: React.Dispatch<React.SetStateAction<TData[]>>;
+  setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  isFetch: boolean;
 }) => {
   const handleDelete = (id: number | string) => () => {
-    const filteredArray = cardList.filter((item) => item.id !== id);
-    setCardList(filteredArray);
+    // const filteredArray = cardList.filter((item) => item.id !== id);
+
+    axios
+      .delete(`${API_URL}/api/cards/${id}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // setCardList(cardList);
   };
+  setIsFetch(!isFetch);
 
   return (
     <>

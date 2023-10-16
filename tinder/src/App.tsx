@@ -14,6 +14,7 @@ import { API_URL, TOKEN } from "./utils";
 function App() {
   // const [list, setList] = useState(dataItems);
   const [cardList, setCardList] = useState<TData[]>([]);
+  const [isFetch, setIsFetch] = useState<boolean>(false);
   // console.log("⭐ ~ file: App.tsx:17 ~ App ~ cardList:", cardList);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ function App() {
       .then((response) => {
         setCardList(response?.data?.data || []);
       });
-  }, []);
+  }, [isFetch]);
   return (
     <>
       {cardList ? (
@@ -38,13 +39,17 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route
               path="/member"
-              element={<Member cardList={cardList} setCardList={setCardList} />}
+              element={
+                <Member
+                  cardList={cardList}
+                  isFetch={isFetch}
+                  setIsFetch={setIsFetch}
+                />
+              }
             />
             <Route
               path="/add"
-              element={
-                <AddCard cardList={cardList} setCardList={setCardList} />
-              }
+              element={<AddCard isFetch={isFetch} setIsFetch={setIsFetch} />}
             />
             <Route
               path="/edit/:id"

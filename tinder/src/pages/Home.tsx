@@ -123,6 +123,8 @@ const Home = ({ cardList }: { cardList: TData[] }) => {
                     margin: `10px`,
                     padding: `10px`,
                     color: `#fff`,
+                    wordWrap: `break-word`,
+                    width: `450px`,
                   }}
                 >
                   <h2 className="text-3xl">{item.attributes.title}</h2>

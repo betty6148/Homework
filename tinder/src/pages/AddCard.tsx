@@ -3,15 +3,21 @@ import { Input, Button } from "antd";
 import CardUpload, { imageUrlAtom } from "../components/CardUpload";
 import { Link } from "react-router-dom";
 // import { nanoid } from "nanoid";
-import { TData } from "../types";
+// import { TData } from "../types";
 import axios from "axios";
 import { API_URL, TOKEN } from "../utils";
 import { useAtom, useSetAtom } from "jotai";
 
 const { TextArea } = Input;
-const AddCard = ({ cardList }: { cardList: TData[] }) => {
+const AddCard = ({
+  isFetch,
+  setIsFetch,
+}: {
+  setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  isFetch: boolean;
+}) => {
   const imageUrl = useAtom<string>(imageUrlAtom);
-  // console.log("⭐ ~ file: AddCard.tsx:14 ~ AddCard ~ imageUrl:", imageUrl[0]);
+  console.log("⭐ ~ file: AddCard.tsx:14 ~ AddCard ~ imageUrl:", imageUrl);
 
   const setImageUrl = useSetAtom(imageUrlAtom);
   const [title, setTitle] = useState("");
@@ -22,10 +28,6 @@ const AddCard = ({ cardList }: { cardList: TData[] }) => {
   };
   const category = title;
   const [description, setDescription] = useState("");
-  console.log(
-    "⭐ ~ file: AddCard.tsx:26 ~ AddCard ~ description:",
-    description
-  );
   const description_onchange: React.ChangeEventHandler<HTMLTextAreaElement> = (
     event
   ) => {
@@ -55,10 +57,37 @@ const AddCard = ({ cardList }: { cardList: TData[] }) => {
       )
       .then(function (response) {
         console.log(response);
+        setIsFetch(!isFetch);
+        // TODO: 為什麼 redirect 不行? By Eleanor & Betty
+        // redirect("/member");
+        // navigate("/member");
+
+        // TODO: step2: reload
+        // FIXME: find another way
+        // window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
       });
+
+    // axios
+    //   .post(
+    //     `${API_URL}/api/upload/`,
+    //     {
+    //       url: imageUrl[0],
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${TOKEN}`,
+    //       },
+    //     }
+    //   )
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
     setTitle("");
     setDescription("");
     setImageUrl("");

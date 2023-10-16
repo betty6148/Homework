@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import type { UploadChangeParam } from "antd/es/upload";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { atom, useAtom } from "jotai";
+// import axios from "axios";
+// import { API_URL, TOKEN } from "../utils";
+
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result as string));
@@ -25,19 +28,44 @@ export const imageUrlAtom = atom<string>("");
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useAtom(imageUrlAtom);
+  // const [selectedFile, setSelectedFile] = useState<string | Blob>("");
+  // const file = new FormData();
+  // file.append("image", imageUrl[0]);
 
   const handleChange: UploadProps["onChange"] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    // if (info.file.status === "uploading") {
-    //   setLoading(true);
-    //   return;
-    // }
-    // if (info.file.status === "done") {
-    // Get this url from response in real world.
     getBase64(info.file.originFileObj as RcFile, (url) => {
       setLoading(false);
       setImageUrl(url);
+      // axios
+      //   .post(`${API_URL}/api/upload/`, file)
+      //   .then((response) => {
+      //     // const fileId = response.data[0].id;
+      //     console.log(response);
+      //     axios
+      //       .post(
+      //         `${API_URL}/api/card/`,
+      //         {
+      //           FormData: file,
+      //         },
+      //         {
+      //           headers: {
+      //             Authorization: `Bearer ${TOKEN}`,
+      //             // "Content-Type": "multipart/form-data",
+      //           },
+      //         }
+      //       )
+      //       .then(function (response) {
+      //         console.log(response);
+      //       })
+      //       .catch(function (error) {
+      //         console.log(error);
+      //       });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     });
     // }
   };
@@ -48,7 +76,6 @@ const App: React.FC = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-  // const [imageUrls, setImageUrls] = useAtom(imageUrlsAtom);
   return (
     <>
       <Upload
