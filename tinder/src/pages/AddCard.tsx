@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { Input, Button } from "antd";
-import CardUpload, { imageUrlAtom } from "../components/CardUpload";
+import CardUpload, {
+  imageUrlAtom,
+  uploadedImageIdAtom,
+} from "../components/CardUpload";
 import { Link } from "react-router-dom";
-// import { nanoid } from "nanoid";
-// import { TData } from "../types";
 import axios from "axios";
 import { API_URL, TOKEN } from "../utils";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 
 const { TextArea } = Input;
 const AddCard = ({
-  isFetch,
   setIsFetch,
 }: {
   setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
-  isFetch: boolean;
 }) => {
-  const imageUrl = useAtom<string>(imageUrlAtom);
-  console.log("⭐ ~ file: AddCard.tsx:14 ~ AddCard ~ imageUrl:", imageUrl);
-
+  // const imageUrl = useAtom<string>(imageUrlAtom);
+  const uploadedImageId = useAtomValue<number | undefined>(uploadedImageIdAtom);
+  console.log("⭐ ~ file: AddCard.tsx:22 ~ uploadedImageId:", uploadedImageId);
   const setImageUrl = useSetAtom(imageUrlAtom);
+
   const [title, setTitle] = useState("");
   const title_onchange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -34,15 +34,53 @@ const AddCard = ({
     setDescription(event.target.value);
   };
 
-  const newCard = {
-    title,
-    category,
-    description,
-    like: 0,
-    dislike: 0,
-  };
+  // const [selectedFile, setSelectedFile] = useState<File>();
 
-  const handleClick = () => {
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   event.target.files
+  //     ? setSelectedFile(event.target.files[0])
+  //     : console.log("error");
+  // };
+  // const handleUpload = async () => {
+  // if (!selectedFile) {
+  //   console.error("請選擇要上傳的文件");
+  //   return;
+  // }
+
+  // const formData = new FormData();
+  // formData.append("files", selectedFile);
+
+  // try {
+  //   const response = await axios.post(`${API_URL}/api/upload/`, formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //       Authorization: `Bearer ${TOKEN}`,
+  //     },
+  //   });
+  //   console.log(
+  //     "⭐ ~ file: AddCard.tsx:114 ~ handleUpload ~ formData:",
+  //     formData
+  //   );
+  //   // const fileId = response.data[0].url;
+  //   console.log("⭐ response.data[0].id:", response.data[0].id);
+  //   setUploadedImageId(response?.data?.[0]?.id);
+
+  //   console.log("文件上傳成功");
+  // } catch (error) {
+  //   console.error("上傳文件時發生錯誤", error);
+  // }
+  // };
+
+  const handleClick = async () => {
+    const newCard = {
+      title,
+      category,
+      description,
+      like: 0,
+      dislike: 0,
+      image: uploadedImageId,
+    };
+
     axios
       .post(
         `${API_URL}/api/cards`,
@@ -57,37 +95,11 @@ const AddCard = ({
       )
       .then(function (response) {
         console.log(response);
-        setIsFetch(!isFetch);
-        // TODO: 為什麼 redirect 不行? By Eleanor & Betty
-        // redirect("/member");
-        // navigate("/member");
-
-        // TODO: step2: reload
-        // FIXME: find another way
-        // window.location.reload();
+        setIsFetch((prev) => !prev);
       })
       .catch(function (error) {
         console.log(error);
       });
-
-    // axios
-    //   .post(
-    //     `${API_URL}/api/upload/`,
-    //     {
-    //       url: imageUrl[0],
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${TOKEN}`,
-    //       },
-    //     }
-    //   )
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
     setTitle("");
     setDescription("");
     setImageUrl("");
@@ -125,7 +137,11 @@ const AddCard = ({
           />
         </div>
         <div className="flex justify-center">
-          <Button type="primary" onClick={handleClick}>
+          <Button
+            type="primary"
+            className="bg-[#e9c46a] rounded"
+            onClick={handleClick}
+          >
             Confirm
           </Button>
         </div>

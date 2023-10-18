@@ -1,17 +1,33 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Input, Button } from "antd";
-import CardDetail from "../components/CardDetail";
+import EditCardDetail from "../components/EditCardDetail";
 import Count from "../components/Count";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TData } from "../types";
 import axios from "axios";
 import { API_URL, TOKEN } from "../utils";
+import { atom, useAtom, useAtomValue } from "jotai";
 
+import { uploadedImageIdAtom } from "../components/CardUpload";
 const { TextArea } = Input;
 
+export const isUploadAtom = atom<boolean>(true);
+
 const isLoading = false;
-const EditCard = ({ cardList }: { cardList: TData[] }) => {
+
+const EditCard = ({
+  cardList,
+  setIsFetch,
+}: {
+  cardList: TData[];
+  setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { id } = useParams();
+  const uploadedImageId = useAtomValue<number | undefined>(uploadedImageIdAtom);
+
+  const [isUpload, setIsUpload] = useAtom(isUploadAtom);
+
   // const item_array = dataItems.filter((data) =>  data.id.toString() === id); // return array
   const item = cardList.find((data) => data.id.toString() === id); // return array
   const [inputTitle, setInputTitle] = useState<string>(
@@ -28,12 +44,17 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
     setInputDescription(e.target.value);
   };
 
-  const handleRemove = () => {};
+  const handleChangeImg = () => {
+    setIsUpload(!isUpload);
+  };
+
   const newCard = {
     title: inputTitle,
     category: inputTitle,
     description: inputDescription,
+    image: uploadedImageId,
   };
+  const navigate = useNavigate();
   const handleClick = () => {
     axios
       .put(
@@ -49,10 +70,12 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
       )
       .then(function (response) {
         console.log(response);
+        setIsFetch((prev) => !prev);
       })
       .catch(function (error) {
         console.log(error);
       });
+    navigate("/member");
   };
 
   return (
@@ -61,7 +84,7 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
         <div className="flex justify-center">
           <div className="flex-col justify-center">
             {!isLoading && item ? (
-              <CardDetail
+              <EditCardDetail
                 id={item.id}
                 name={inputTitle}
                 category={item.attributes.title}
@@ -73,12 +96,11 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
                 description={inputDescription}
                 like={item.attributes.like}
                 dislike={item.attributes.dislike}
-                remove={handleRemove}
+                remove={handleChangeImg}
               />
             ) : (
               <>No data</>
             )}
-
             {isLoading && (
               <>
                 <div className="animate-pulse bg-slate-500 aspect-[3/4] w-full rounded-lg"></div>
@@ -98,8 +120,13 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
           </div>
         </div>
 
-        <div className="py-8">
-          <Input placeholder="Title" className="mb-2" onChange={TextOnChange} />
+        <div className="py-8 mx-12">
+          <Input
+            className="mb-2"
+            onChange={TextOnChange}
+            placeholder="Title"
+            defaultValue={item?.attributes.title}
+          />
           <TextArea
             showCount
             maxLength={100}
@@ -109,10 +136,15 @@ const EditCard = ({ cardList }: { cardList: TData[] }) => {
             }}
             onChange={TextAreaOnChange}
             placeholder="Describe..."
+            defaultValue={item?.attributes.description}
           />
         </div>
         <div className="flex justify-center">
-          <Button type="primary" onClick={handleClick}>
+          <Button
+            type="primary"
+            onClick={handleClick}
+            className="bg-[#e9c46a] rounded"
+          >
             OK
           </Button>
         </div>

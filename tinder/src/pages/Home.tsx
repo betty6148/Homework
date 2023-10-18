@@ -108,7 +108,7 @@ const Home = ({ cardList }: { cardList: TData[] }) => {
                   maxHeight: `60vw`,
                   padding: `20px`,
                   height: `50vh`,
-                  boxShadow: `0px 18px 53px 0px rgba(0, 0, 0, 0.3)`,
+                  boxShadow: `0px 18px 35px 0px rgba(0, 0, 0, 0.1)`,
                   borderRadius: `20px`,
                   backgroundSize: `cover`,
                   backgroundPosition: `center`,

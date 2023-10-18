@@ -4,8 +4,8 @@ import { message, Upload } from "antd";
 import type { UploadChangeParam } from "antd/es/upload";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { atom, useAtom } from "jotai";
-// import axios from "axios";
-// import { API_URL, TOKEN } from "../utils";
+import axios from "axios";
+import { API_URL, TOKEN } from "../utils";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -24,50 +24,49 @@ const beforeUpload = (file: RcFile) => {
   }
   return isJpgOrPng && isLt2M;
 };
+
 export const imageUrlAtom = atom<string>("");
-const App: React.FC = () => {
+export const uploadedImageIdAtom = atom<number | undefined>(undefined);
+const CardUpload: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useAtom(imageUrlAtom);
-  // const [selectedFile, setSelectedFile] = useState<string | Blob>("");
-  // const file = new FormData();
-  // file.append("image", imageUrl[0]);
-
-  const handleChange: UploadProps["onChange"] = (
+  const [uploadedImageId, setUploadedImageId] = useAtom(uploadedImageIdAtom);
+  const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
   ) => {
+    console.log("info.fileList", info.fileList);
+    console.log("info.file.status", info.file.status);
     getBase64(info.file.originFileObj as RcFile, (url) => {
       setLoading(false);
       setImageUrl(url);
-      // axios
-      //   .post(`${API_URL}/api/upload/`, file)
-      //   .then((response) => {
-      //     // const fileId = response.data[0].id;
-      //     console.log(response);
-      //     axios
-      //       .post(
-      //         `${API_URL}/api/card/`,
-      //         {
-      //           FormData: file,
-      //         },
-      //         {
-      //           headers: {
-      //             Authorization: `Bearer ${TOKEN}`,
-      //             // "Content-Type": "multipart/form-data",
-      //           },
-      //         }
-      //       )
-      //       .then(function (response) {
-      //         console.log(response);
-      //       })
-      //       .catch(function (error) {
-      //         console.log(error);
-      //       });
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     });
-    // }
+
+    if (!info.file.originFileObj) {
+      console.error("請選擇要上傳的文件");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("files", info.file.originFileObj);
+
+    try {
+      const response = await axios.post(`${API_URL}/api/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      });
+      console.log("⭐ response.data[0].id:", response.data[0].id);
+      setUploadedImageId(response?.data?.[0]?.id);
+      console.log(
+        "⭐ ~ file: CardUpload.tsx:34 ~ uploadedImageId:",
+        uploadedImageId
+      );
+
+      console.log("文件上傳成功");
+    } catch (error) {
+      console.error("上傳文件時發生錯誤", error);
+    }
   };
 
   const uploadButton = (
@@ -81,7 +80,7 @@ const App: React.FC = () => {
       <Upload
         name="avatar"
         listType="picture-card"
-        className="avatar-uploader w-fit"
+        className="avatar-uploader w-fit "
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleChange}
@@ -96,4 +95,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default CardUpload;

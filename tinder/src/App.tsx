@@ -10,12 +10,13 @@ import { useState, useEffect } from "react";
 import { TData } from "./types";
 import axios from "axios";
 import { API_URL, TOKEN } from "./utils";
+import { Spin } from "antd";
 
 function App() {
   // const [list, setList] = useState(dataItems);
   const [cardList, setCardList] = useState<TData[]>([]);
   const [isFetch, setIsFetch] = useState<boolean>(false);
-  // console.log("⭐ ~ file: App.tsx:17 ~ App ~ cardList:", cardList);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -29,38 +30,28 @@ function App() {
       })
       .then((response) => {
         setCardList(response?.data?.data || []);
+        setIsLoading(false);
       });
   }, [isFetch]);
   return (
     <>
-      {cardList ? (
+      <Spin spinning={isLoading}>
         <Router>
           <Routes>
             <Route path="/login" element={<LogIn />} />
             <Route
               path="/member"
-              element={
-                <Member
-                  cardList={cardList}
-                  isFetch={isFetch}
-                  setIsFetch={setIsFetch}
-                />
-              }
+              element={<Member cardList={cardList} setIsFetch={setIsFetch} />}
             />
-            <Route
-              path="/add"
-              element={<AddCard isFetch={isFetch} setIsFetch={setIsFetch} />}
-            />
+            <Route path="/add" element={<AddCard setIsFetch={setIsFetch} />} />
             <Route
               path="/edit/:id"
-              element={<EditCard cardList={cardList} />}
+              element={<EditCard cardList={cardList} setIsFetch={setIsFetch} />}
             />
             <Route index element={<Home cardList={cardList} />} />
           </Routes>
         </Router>
-      ) : (
-        <p>isLoading...</p>
-      )}
+      </Spin>
     </>
   );
 }

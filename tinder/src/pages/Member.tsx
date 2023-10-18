@@ -9,14 +9,10 @@ import { API_URL, TOKEN } from "../utils";
 
 const Member = ({
   cardList,
-  // setCardList
   setIsFetch,
-  isFetch,
 }: {
   cardList: TData[];
-  // setCardList: React.Dispatch<React.SetStateAction<TData[]>>;
   setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
-  isFetch: boolean;
 }) => {
   const handleDelete = (id: number | string) => () => {
     // const filteredArray = cardList.filter((item) => item.id !== id);
@@ -29,13 +25,12 @@ const Member = ({
       })
       .then(function (response) {
         console.log(response);
+        setIsFetch((prev) => !prev);
       })
       .catch(function (error) {
         console.log(error);
       });
-    // setCardList(cardList);
   };
-  setIsFetch(!isFetch);
 
   return (
     <>
@@ -65,7 +60,7 @@ const Member = ({
         <div className="flex justify-center mt-8">
           <Link to="/add">
             <Button
-              className="w-36 mb-8 "
+              className="w-36 mb-8 bg-[#e9c46a] rounded"
               type="primary"
               shape="round"
               icon={<PlusCircleOutlined />}
